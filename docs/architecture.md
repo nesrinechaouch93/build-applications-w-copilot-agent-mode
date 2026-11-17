@@ -30,20 +30,28 @@ OctoFit Tracker is a three-tier application for a school fitness program. The st
 
 Record your plan here before editing code.
 
-- Presentation tier decision:
-- Logic tier decision:
-- Data tier decision:
-- Activity tracking approach:
-- Team management approach:
-- Leaderboard approach:
-- Workout suggestions approach:
+- Presentation tier decision:Add React routes for Activities, Teams, Leaderboard, and Workouts; use a shared API client and accessible loading, empty, and error states.
+- Logic tier decision:Implement Express /api/* handlers with typed request validation and deliberate 4xx responses for invalid IDs or missing records.
+- Data tier decision: Complete the Mongoose schemas and retain seed data that is representative and idempotent.
+- Activity tracking approach:Validate user/team IDs and references before creating activities. Store computed positive points and an occurredAt timestamp.
+- Team management approach:Require name and mascot; default members to an empty array and expose team members in API responses.
+- Leaderboard approach: Aggregate activity points by team, sort highest first, and assign one-based ranks.
+- Workout suggestions approach:Match the user by email, infer a focus from goal or recent activity, filter matching workouts, and include a reason.
 
 ## Test plan
 
 Record the commands you run and what each failure means.
 
 - Data-tier command: `npm run test:data --prefix octofit-tracker/backend`
+Verifies Mongoose validation, linked seed records, and idempotent seeding.
+Run first; failures indicate incomplete or overstrict data schemas.
 - API command: `npm run test:api --prefix octofit-tracker/backend`
+Verifies activity/team CRUD, leaderboard aggregation, workout matching, and 4xx handling.
+Run after data contracts pass; failures indicate missing or incorrect Express behavior.
 - Frontend command: `npm test --prefix octofit-tracker/frontend`
+Verifies API data rendering and loading, empty, and accessible error states.
+Run after API contracts pass.
 - Backend build command: `npm run build --prefix octofit-tracker/backend`
+Catches TypeScript and backend build issues.
 - Frontend build command: `npm run build --prefix octofit-tracker/frontend`
+Catches TypeScript, React, and Vite integration issues.
